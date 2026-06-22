@@ -1,9 +1,9 @@
 # Default owner for everything in the repo.
-*                                               @nocrash-io/maintainers
+*                                               @nocrashio/maintainers
 
 # Security-sensitive surfaces require owner review.
-/credentials/                                   @nocrash-io/owners
-/.github/                                        @nocrash-io/owners
+/credentials/                                   @nocrashio/owners
+/.github/                                        @nocrashio/owners
 
 # The load-bearing credential-stripping boundary — any change here is an owner review.
-/nodes/Nocrash/shared/stripCredentials.ts        @nocrash-io/owners
+/nodes/Nocrash/shared/stripCredentials.ts        @nocrashio/owners

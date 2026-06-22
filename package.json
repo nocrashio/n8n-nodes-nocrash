@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-nocrash",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Audit your entire n8n in 30 seconds, free. NoCrash watches your n8n automations and tells you in plain language when something breaks, before your customers do.",
   "license": "MIT",
   "homepage": "https://nocrash.io",
@@ -18,10 +18,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nocrash-io/n8n-nodes-nocrash.git"
+    "url": "git+https://github.com/nocrashio/n8n-nodes-nocrash.git"
   },
   "bugs": {
-    "url": "https://github.com/nocrash-io/n8n-nodes-nocrash/issues"
+    "url": "https://github.com/nocrashio/n8n-nodes-nocrash/issues"
   },
   "engines": {
     "node": ">=20.15"
