@@ -2,7 +2,7 @@
 
 Ready-to-import n8n workflow templates that showcase the NoCrash node.
 
-Each one is built as a **good** n8n workflow — descriptive step names, retries on
+Each one is built as a **well-made** n8n workflow — descriptive step names, retries on
 every step that calls a service, an execution timeout, a set timezone, and a
 sticky note explaining the flow. Every template scores **97 / 100 ("Solid")**
 on the public [NoCrash Workflow Grader](https://nocrash.io/tools/n8n-workflow-grader)
@@ -80,5 +80,5 @@ report.
 ## Links
 
 - Public n8n Workflow Grader: <https://nocrash.io/tools/n8n-workflow-grader>
-- Connect your instance: <https://nocrash.io/connect>
+- Start watching your n8n: <https://nocrash.io/>
 - Free NoCrash account: <https://nocrash.io>

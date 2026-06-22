@@ -13,7 +13,7 @@ export const heartbeatFields: INodeProperties[] = [
     type: "string",
     default: "",
     required: true,
-    description: "The NoCrash monitor (watch) to send a heartbeat for",
+    description: "Which NoCrash watch this heartbeat is for (its Monitor ID, from your NoCrash dashboard)",
     displayOptions: {
       show: { operation: ["heartbeat"] },
     },
