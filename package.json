@@ -1,0 +1,63 @@
+{
+  "name": "n8n-nodes-nocrash",
+  "version": "0.1.0",
+  "description": "Audit your entire n8n in 30 seconds, free. NoCrash watches your n8n automations and tells you in plain language when something breaks, before your customers do.",
+  "license": "MIT",
+  "homepage": "https://nocrash.io",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "monitoring",
+    "reliability",
+    "n8n-audit"
+  ],
+  "author": {
+    "name": "NoCrash",
+    "email": "hello@nocrash.io",
+    "url": "https://nocrash.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nocrash-io/n8n-nodes-nocrash.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nocrash-io/n8n-nodes-nocrash/issues"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "scan": "npx --yes @n8n/scan-community-package .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/NocrashN8nApi.credentials.js",
+      "dist/credentials/NocrashApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Nocrash/Nocrash.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "0.35.1",
+    "@types/node": "20.19.0",
+    "eslint": "9.29.0",
+    "eslint-plugin-n8n-nodes-base": "1.16.7",
+    "typescript": "5.9.2",
+    "vitest": "4.1.9"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}
