@@ -90,7 +90,7 @@
             {
               "id": "a-scorecard",
               "name": "scorecard",
-              "value": "=Weekly n8n reliability scorecard\n\nInstance grade: {{ $json.instanceScore }}/100 ({{ $json.instanceBandLabel }})\nWorkflows graded: {{ $json.workflowCount }}\nNeed a look: {{ ($json.workflows || []).filter(w => w.band !== 'green').length }}\n\nLowest-scoring workflows:\n{{ ($json.workflows || []).slice().sort((a,b) => (a.score||0) - (b.score||0)).slice(0,3).map(w => '• ' + w.name + ' — ' + w.score + '/100').join('\\n') }}\n\nWatch them 24/7 and get alerted the moment one breaks: {{ $json.connectUrl }}",
+              "value": "=Weekly n8n reliability scorecard\n\nInstance grade: {{ $json.instanceScore }}/100 ({{ $json.instanceBandLabel }})\nWorkflows graded: {{ $json.workflowCount }}\nNeed a look: {{ ($json.workflows || []).filter(w => w.band !== 'green').length }}\n\nLowest-scoring workflows:\n{{ ($json.workflows || []).slice().sort((a,b) => (a.score||0) - (b.score||0)).slice(0,3).map(w => '• ' + w.name + ' — ' + w.score + '/100').join('\\n') }}\n\nThis scorecard grades how your workflows are built. To get told the moment one stops running — by Telegram, email, Discord, or Slack — watch them 24/7 with NoCrash: {{ $json.connectUrl }}",
               "type": "string"
             },
             {
@@ -125,7 +125,7 @@
           "mode": "name",
           "value": "automation-health"
         },
-        "text": "={{ $json.emoji }} *Weekly reliability scorecard — {{ $json.grade }}/100 ({{ $json.band }})*\nGraded {{ $json.workflowCount }} workflows · *{{ $json.atRiskCount }}* need a look.\n\n*Lowest-scoring:*\n{{ $json.worstOffenders }}\n\nWatch them 24/7 → {{ $json.connectUrl }}",
+        "text": "={{ $json.emoji }} *Weekly reliability scorecard — {{ $json.grade }}/100 ({{ $json.band }})*\nGraded {{ $json.workflowCount }} workflows · *{{ $json.atRiskCount }}* need a look.\n\n*Lowest-scoring:*\n{{ $json.worstOffenders }}\n\nThis grades how they're built. To get told the moment one stops running, watch them 24/7 with NoCrash → {{ $json.connectUrl }}",
         "otherOptions": {}
       },
       "id": "post-scorecard-slack",

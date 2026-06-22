@@ -13,7 +13,7 @@ export const reportFailureFields: INodeProperties[] = [
     type: "string",
     default: "",
     required: true,
-    description: "The NoCrash monitor (watch) to report a failure for",
+    description: "Which NoCrash watch this failure is for (its Monitor ID, from your NoCrash dashboard)",
     displayOptions: {
       show: { operation: ["reportFailure"] },
     },

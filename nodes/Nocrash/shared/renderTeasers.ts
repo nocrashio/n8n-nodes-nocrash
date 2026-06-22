@@ -10,16 +10,23 @@
 
 import type { GraderWorkflowRow } from "./graderClient";
 
-/** Public connect destination. The node appends a source attribution param. */
-const CONNECT_PATH = "/connect";
+/**
+ * Public connect destination — the NoCrash landing page (root). Node users are
+ * first-touch, so we send them to the page that warms them up and carries the
+ * "Start free" CTA, not straight to a sign-up form. The node appends a source
+ * attribution param.
+ */
+const CONNECT_PATH = "/";
 
 /** Source attribution so we can measure node-driven activations. */
 const CONNECT_SOURCE = "n8n-node-audit";
 
 /** Static teaser copy shown per workflow (free path: no runtime computation). */
 const LOCKED_AI_TEASER =
-  "Connect this workflow to NoCrash to unlock the runtime Reliability Score, " +
-  "AI root-cause + fix, 24/7 watch, and 3am alerts when it silently breaks.";
+  "Connect this workflow to NoCrash and we watch it 24/7: a runtime Reliability " +
+  "Score, AI root-cause and fix, a daily plain-language brief, and a 3am alert " +
+  "(Telegram, email, Discord, or Slack) the moment it silently breaks — so your " +
+  "customers aren't the first to know.";
 
 export interface TeasedWorkflowRow extends GraderWorkflowRow {
   /** Upsell line describing the paid runtime depth for this workflow. */

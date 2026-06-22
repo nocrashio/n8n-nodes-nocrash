@@ -105,7 +105,7 @@
     {
       "parameters": {
         "chatId": "REPLACE_WITH_YOUR_TELEGRAM_CHAT_ID",
-        "text": "={{ $json.emoji }} *Daily n8n health — {{ $json.grade }}/100 ({{ $json.band }})*\nGraded {{ $json.workflowCount }} workflows. *{{ $json.atRiskCount }}* need a look.\nWatch them 24/7 + get 3am alerts: {{ $json.connectUrl }}",
+        "text": "={{ $json.emoji }} *Daily n8n health — {{ $json.grade }}/100 ({{ $json.band }})*\nGraded {{ $json.workflowCount }} workflows. *{{ $json.atRiskCount }}* need a look.\nThis grades how they're built. To get told the moment one stops running, watch them 24/7 with NoCrash: {{ $json.connectUrl }}",
         "additionalFields": {
           "parse_mode": "Markdown"
         }

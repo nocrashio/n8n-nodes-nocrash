@@ -1,10 +1,10 @@
 # n8n-nodes-nocrash
 
-**Audit your entire n8n in 30 seconds. Free.**
+**Grade your entire n8n in 30 seconds. Free.**
 
-This is an [n8n community node](https://docs.n8n.io/integrations/community-nodes/). Drop it into a workflow, point it at your own n8n, and get an instant X-ray of every workflow you run — a health grade, a per-workflow scorecard, and the top issue holding each one back.
+This is an [n8n community node](https://docs.n8n.io/integrations/community-nodes/). Drop it into a workflow, point it at your own n8n, and get an instant X-ray of how well every workflow is built — a design grade out of 100, a per-workflow scorecard, and the one issue holding each one back. No account required to try it.
 
-Then, when you want NoCrash to catch silent failures before your customers do, connect your instance for the runtime Reliability Score, AI root-cause, and 3am alerts.
+The grade tells you how *solid* your workflows are. It doesn't tell you when one quietly stops running. For that, connect your instance to NoCrash — and we'll watch every workflow around the clock and tell you, in plain language, the moment something breaks. Before your customers do.
 
 ---
 
@@ -21,19 +21,20 @@ Instance grade:  72 / 100   ·   Needs a look   ·   18 workflows graded
   │ Nightly DB backup               │  34   │ red     │ Silent fail: no alert path   │
   └─────────────────────────────────┴───────┴─────────┴──────────────────────────────┘
 
-  Connect this workflow to NoCrash to unlock the runtime Reliability Score,
-  AI root-cause + fix, 24/7 watch, and 3am alerts when it silently breaks.
+  Connect to NoCrash and we watch every workflow 24/7: a runtime Reliability
+  Score, AI root-cause + fix, a daily plain-language brief, and a 3am alert
+  (Telegram, email, Discord, or Slack) the moment one silently breaks.
 
-  → Connect: https://nocrash.io/connect?source=n8n-node-audit
+  → Start free: https://nocrash.io/?source=n8n-node-audit
 ```
 
 ---
 
-## Trust
+## Your data stays yours
 
-> **The audit runs inside your own n8n with your own API key. Credentials are stripped before anything is sent. We never store your workflow definitions.**
+> **The grading runs inside your own n8n with your own API key. Every credential and secret is stripped out on your machine before anything leaves it. We never store your workflow definitions.**
 
-The node lists your workflows and reads their design via your own n8n API key. Before any workflow is sent to the NoCrash Grader, every credential reference and secret-bearing field is removed locally (see [`stripCredentials`](nodes/Nocrash/shared/stripCredentials.ts)). The free audit grades **design only** — it never reads your executions or runtime data.
+The node lists your workflows and reads how they're built, using your own n8n API key. Before any workflow is sent to the NoCrash Grader, every credential reference and secret-bearing field is removed locally (see [`stripCredentials`](nodes/Nocrash/shared/stripCredentials.ts)). The free grade looks at **design only** — it never reads what your workflows actually ran or any of your data.
 
 ---
 
@@ -41,16 +42,16 @@ The node lists your workflows and reads their design via your own n8n API key. B
 
 | | **Free (this node)** | **Connected to NoCrash** |
 |---|---|---|
-| Static workflow **Grade** | ✅ | ✅ |
+| Static workflow **Grade** (how well it's built) | ✅ | ✅ |
 | Design-issue detection | ✅ | ✅ |
 | Instance scorecard | ✅ | ✅ |
-| Runtime **Reliability Score** | — | ✅ |
+| Runtime **Reliability Score** (how it's actually behaving) | — | ✅ |
 | AI root-cause + fix | — | ✅ |
-| 24/7 watch | — | ✅ |
-| 3am alerts (Telegram, email) | — | ✅ |
+| 24/7 watch — we notice when a workflow goes quiet | — | ✅ |
+| 3am alerts — Telegram, email, Discord, and Slack | — | ✅ |
 | Daily plain-language brief | — | ✅ |
 
-The free audit is a one-shot design grade. Connecting turns it into continuous, runtime monitoring.
+The free grade is a one-time, design-only check — it tells you how well your workflows are built. It does **not** watch them or know when something breaks. Connecting to NoCrash adds the runtime side: continuous watching, plain-language alerts, and a daily brief.
 
 ---
 
@@ -58,7 +59,7 @@ The free audit is a one-shot design grade. Connecting turns it into continuous, 
 
 ### Audit my n8n (default)
 
-Grades every workflow in your instance and returns one item: the instance grade, a per-workflow scorecard, and a connect CTA.
+Grades every workflow in your instance and returns one item: the instance grade, a per-workflow scorecard, and a link to start watching them for real.
 
 - **Credential:** *NoCrash — Your n8n API* (your own n8n instance URL + API key)
 - **Scope:** All workflows / Active only
@@ -105,14 +106,14 @@ npm install n8n-nodes-nocrash
 
 ## Templates
 
-Ready-to-import starter workflows live in [`templates/`](templates/). *(The 5 launch templates are tracked in #2094.)*
+Five ready-to-import starter workflows live in [`templates/`](templates/) — a daily self-grade to Slack or Telegram, a dead-man's-switch heartbeat, an auto-report-on-error workflow, and a weekly reliability scorecard. Each one is a well-built n8n workflow you can adapt to your own steps. See [`templates/README.md`](templates/README.md).
 
 ---
 
 ## Links
 
 - Public n8n Workflow Grader: <https://nocrash.io/tools/n8n-workflow-grader>
-- Connect your instance: <https://nocrash.io/connect>
+- Start watching your n8n: <https://nocrash.io/>
 
 ---
 
