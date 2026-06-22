@@ -1,0 +1,123 @@
+{
+  "name": "Heartbeat on every run",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Heartbeat on every run (dead-man's switch)\n\nDrop a NoCrash **Heartbeat** node at the **end** of any critical workflow. Every time the workflow finishes, it pings NoCrash to say \"I ran.\"\n\nIf the ping ever stops arriving — because the workflow silently stopped, the trigger broke, or the instance went down — NoCrash notices the missing heartbeat and alerts you. **You find out it stopped, even when there's no error to catch.**\n\n**What you need**\n- A *NoCrash API* credential (your `nc_` key) on the Heartbeat node.\n- The Monitor ID of the watch you created in NoCrash for this workflow.\n\nReplace the demo middle steps with your real work — the only thing that matters is that **Heartbeat is the last node**.\n\nRequires a free NoCrash account → https://nocrash.io",
+        "height": 400,
+        "width": 440,
+        "color": 4
+      },
+      "id": "note-overview",
+      "name": "How this works",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-280, -60]
+    },
+    {
+      "parameters": {
+        "content": "### Your real work goes here\nThis HTTP step stands in for whatever your\ncritical workflow actually does. Swap it\nfor your real steps — keep Heartbeat last.",
+        "height": 200,
+        "width": 280,
+        "color": 7
+      },
+      "id": "note-work",
+      "name": "Replace this step",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [440, -80]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "trigger-hourly",
+      "name": "Run this workflow hourly",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [240, 160]
+    },
+    {
+      "parameters": {
+        "url": "https://api.example.com/do-the-work",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "do-the-work",
+      "name": "Do the critical work",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [480, 160],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "operation": "heartbeat",
+        "monitorId": "REPLACE_WITH_YOUR_MONITOR_ID",
+        "executionId": "={{ $execution.id }}",
+        "durationMs": 0,
+        "metadata": "{}"
+      },
+      "id": "send-heartbeat",
+      "name": "Send heartbeat to NoCrash",
+      "type": "n8n-nodes-nocrash.nocrash",
+      "typeVersion": 1,
+      "position": [720, 160],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "nocrashApi": {
+          "id": "REPLACE_WITH_YOUR_NOCRASH_API_CREDENTIAL_ID",
+          "name": "NoCrash API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Run this workflow hourly": {
+      "main": [
+        [
+          {
+            "node": "Do the critical work",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Do the critical work": {
+      "main": [
+        [
+          {
+            "node": "Send heartbeat to NoCrash",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "UTC",
+    "executionTimeout": 300,
+    "saveExecutionProgress": true,
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}
