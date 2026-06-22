@@ -67,7 +67,7 @@ Grades every workflow in your instance and returns one item: the instance grade,
 
 ### Heartbeat
 
-Confirms a workflow ran by sending a ping to a NoCrash monitor.
+Confirms a workflow ran by sending a ping to a NoCrash watch.
 
 - **Credential:** *NoCrash API* (your `nc_` key)
 - **Monitor ID** (required), optional Execution ID / Duration / Metadata
