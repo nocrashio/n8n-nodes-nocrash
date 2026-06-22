@@ -1,0 +1,117 @@
+{
+  "name": "Report failure from error trigger",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Report failures into NoCrash automatically\n\nSet this workflow as the **Error Workflow** for any (or every) workflow in your n8n. Whenever one of them throws an error, n8n fires this workflow's Error Trigger — and the NoCrash **Report Failure** step records exactly what broke, on which node, with the execution ID.\n\nNow every failure lands in your NoCrash brief and alerts in plain language — no more silently-broken pipelines you discover days later.\n\n**Set it up**\n1. In each workflow's *Settings → Error Workflow*, choose this workflow.\n2. Put your NoCrash Monitor ID on the Report Failure step.\n3. Add a *NoCrash API* credential (your `nc_` key).\n\nRequires a free NoCrash account → https://nocrash.io",
+        "height": 380,
+        "width": 440,
+        "color": 4
+      },
+      "id": "note-overview",
+      "name": "How this works",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-280, -40]
+    },
+    {
+      "parameters": {},
+      "id": "on-workflow-error",
+      "name": "When a workflow errors",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [260, 140]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a-msg",
+              "name": "errorMessage",
+              "value": "={{ $json.execution?.error?.message || $json.error?.message || 'A workflow run failed' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-node",
+              "name": "failedNode",
+              "value": "={{ $json.execution?.lastNodeExecuted || $json.error?.node?.name || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-exec",
+              "name": "executionId",
+              "value": "={{ $json.execution?.id || '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-error",
+      "name": "Pull out the error details",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [500, 140]
+    },
+    {
+      "parameters": {
+        "operation": "reportFailure",
+        "monitorId": "REPLACE_WITH_YOUR_MONITOR_ID",
+        "errorMessage": "={{ $json.errorMessage }}",
+        "failedNode": "={{ $json.failedNode }}",
+        "executionId": "={{ $json.executionId }}"
+      },
+      "id": "report-failure",
+      "name": "Report the failure to NoCrash",
+      "type": "n8n-nodes-nocrash.nocrash",
+      "typeVersion": 1,
+      "position": [740, 140],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "nocrashApi": {
+          "id": "REPLACE_WITH_YOUR_NOCRASH_API_CREDENTIAL_ID",
+          "name": "NoCrash API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When a workflow errors": {
+      "main": [
+        [
+          {
+            "node": "Pull out the error details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pull out the error details": {
+      "main": [
+        [
+          {
+            "node": "Report the failure to NoCrash",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "UTC",
+    "executionTimeout": 300,
+    "saveExecutionProgress": true,
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

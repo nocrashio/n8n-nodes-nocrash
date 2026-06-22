@@ -1,0 +1,176 @@
+{
+  "name": "Daily n8n self-audit to Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Daily n8n self-audit → Telegram\n\nEvery morning this workflow asks NoCrash to grade **every workflow in your n8n**, then sends the instance grade and at-risk count to a Telegram chat — your morning health check before the day starts.\n\n**What you need**\n- A *NoCrash — Your n8n Instance API* credential (your own n8n URL + n8n API key) on the audit step.\n- A Telegram credential on the send step, plus the chat ID to message.\n\nThe free audit grades **design only** — it never reads your executions. Credentials are stripped before anything is sent.\n\nRequires a free NoCrash account → https://nocrash.io",
+        "height": 360,
+        "width": 420,
+        "color": 4
+      },
+      "id": "note-overview",
+      "name": "How this works",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-260, -40]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "trigger-daily-8am",
+      "name": "Every morning at 8am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [220, 120]
+    },
+    {
+      "parameters": {
+        "operation": "audit",
+        "scope": "all",
+        "maxWorkflows": 50
+      },
+      "id": "audit-my-n8n",
+      "name": "Audit my n8n (NoCrash)",
+      "type": "n8n-nodes-nocrash.nocrash",
+      "typeVersion": 1,
+      "position": [460, 120],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "nocrashN8nApi": {
+          "id": "REPLACE_WITH_YOUR_NOCRASH_N8N_CREDENTIAL_ID",
+          "name": "NoCrash — Your n8n Instance API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a-grade",
+              "name": "grade",
+              "value": "={{ $json.instanceScore }}",
+              "type": "number"
+            },
+            {
+              "id": "a-band",
+              "name": "band",
+              "value": "={{ $json.instanceBandLabel }}",
+              "type": "string"
+            },
+            {
+              "id": "a-count",
+              "name": "workflowCount",
+              "value": "={{ $json.workflowCount }}",
+              "type": "number"
+            },
+            {
+              "id": "a-atrisk",
+              "name": "atRiskCount",
+              "value": "={{ ($json.workflows || []).filter(w => w.band !== 'green').length }}",
+              "type": "number"
+            },
+            {
+              "id": "a-emoji",
+              "name": "emoji",
+              "value": "={{ $json.instanceScore >= 80 ? '🟢' : $json.instanceScore >= 60 ? '🟡' : '🔴' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-connect",
+              "name": "connectUrl",
+              "value": "={{ $json.connectUrl }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-grade",
+      "name": "Format the grade",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [700, 120]
+    },
+    {
+      "parameters": {
+        "chatId": "REPLACE_WITH_YOUR_TELEGRAM_CHAT_ID",
+        "text": "={{ $json.emoji }} *Daily n8n health — {{ $json.grade }}/100 ({{ $json.band }})*\nGraded {{ $json.workflowCount }} workflows. *{{ $json.atRiskCount }}* need a look.\nWatch them 24/7 + get 3am alerts: {{ $json.connectUrl }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "send-telegram",
+      "name": "Send the grade to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [940, 120],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every morning at 8am": {
+      "main": [
+        [
+          {
+            "node": "Audit my n8n (NoCrash)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit my n8n (NoCrash)": {
+      "main": [
+        [
+          {
+            "node": "Format the grade",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format the grade": {
+      "main": [
+        [
+          {
+            "node": "Send the grade to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "UTC",
+    "executionTimeout": 300,
+    "saveExecutionProgress": true,
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}
