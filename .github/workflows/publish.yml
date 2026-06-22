@@ -7,7 +7,7 @@
 # ─── ONE-TIME SETUP (OIDC Trusted Publishing) ──────────────────────────────────
 #   1. npmjs.com -> package settings -> Publishing access -> Trusted Publishers.
 #   2. Add a GitHub Actions publisher:
-#        Repository owner: nocrash-io
+#        Repository owner: nocrashio
 #        Repository name:  n8n-nodes-nocrash
 #        Workflow name:    publish.yml
 #        Environment:      npm-publish

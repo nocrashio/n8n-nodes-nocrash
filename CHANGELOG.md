@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-06-22
+
+### Fixed
+
+- Corrected the GitHub organization slug in package metadata (`repository` + `bugs` URLs), the publish workflow, and CODEOWNERS: `nocrash-io` -> `nocrashio`.
+
+### Changed
+
+- First release published via OIDC trusted publishing with npm provenance.
+
 ### Added
 
 - Initial package scaffold and V1 implementation.
@@ -22,4 +32,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   are removed before any workflow design leaves your n8n.
 - Zero runtime dependencies — uses only n8n's built-in request helpers.
 
-[Unreleased]: https://github.com/nocrash-io/n8n-nodes-nocrash/commits/main
+[Unreleased]: https://github.com/nocrashio/n8n-nodes-nocrash/commits/main
