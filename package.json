@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-nocrash",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Audit your entire n8n in 30 seconds, free. NoCrash watches your n8n automations and tells you in plain language when something breaks, before your customers do.",
   "license": "MIT",
   "homepage": "https://nocrash.io",

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-06-24
+
+### Changed
+
+- README: clarified that the package integrates a single third-party service (NoCrash); the n8n-instance credential is the user's own instance, used only for the local Audit read.
+
 ## [0.1.1] - 2026-06-22
 
 ### Fixed
