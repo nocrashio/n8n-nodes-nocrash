@@ -102,6 +102,8 @@ npm install n8n-nodes-nocrash
 - **NoCrash — Your n8n API** — your n8n instance URL + an n8n API key (Settings → API in your n8n). Used only for the audit. Credentials are stripped before any workflow design is sent.
 - **NoCrash API** — your NoCrash key (starts with `nc_`), created in the NoCrash dashboard under Settings → API keys. Used for Heartbeat and Report Failure.
 
+> **One third-party service.** This package integrates a single third-party service — **NoCrash**. The *NoCrash — Your n8n API* credential is your own n8n instance's API key, used only by the Audit operation to read your workflow design locally (credentials are stripped before anything is sent). It is not a second third-party integration.
+
 ---
 
 ## Templates
