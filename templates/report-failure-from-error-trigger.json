@@ -3,7 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Report failures into NoCrash automatically\n\nSet this workflow as the **Error Workflow** for any (or every) workflow in your n8n. Whenever one of them throws an error, n8n fires this workflow's Error Trigger — and the NoCrash **Report Failure** step records exactly what broke, on which node, with the execution ID.\n\nNow every failure lands in your NoCrash brief and alerts in plain language — no more silently-broken pipelines you discover days later.\n\n**Set it up**\n1. In each workflow's *Settings → Error Workflow*, choose this workflow.\n2. Put your NoCrash Monitor ID on the Report Failure step.\n3. Add a *NoCrash API* credential (your `nc_` key).\n\nRequires a free NoCrash account → https://nocrash.io",
+        "content": "## Report failures into NoCrash automatically\n\nSet this workflow as the **Error Workflow** for any (or every) workflow in your n8n. Whenever one of them throws an error, n8n fires this workflow's Error Trigger — and the NoCrash **Report Failure** step records exactly what broke, on which node, with the execution ID.\n\nNow every failure lands in your NoCrash brief and alerts in plain language — no more silently-broken pipelines you discover days later.\n\n**Set it up**\n1. In each workflow's *Settings → Error Workflow*, choose this workflow.\n2. Put your NoCrash Monitor ID on the Report Failure step.\n3. Add a *NoCrash API* credential (your `nc_` key).\n\nRequires a free NoCrash account → https://nocrash.io/?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026",
         "height": 380,
         "width": 440,
         "color": 4

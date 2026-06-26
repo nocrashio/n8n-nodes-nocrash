@@ -25,7 +25,7 @@ Instance grade:  72 / 100   ·   Needs a look   ·   18 workflows graded
   Score, AI root-cause + fix, a daily plain-language brief, and a 3am alert
   (Telegram, email, Discord, or Slack) the moment one silently breaks.
 
-  → Start free: https://nocrash.io/?source=n8n-node-audit
+  → Start free: https://nocrash.io/?utm_source=n8n-node&utm_medium=community&utm_campaign=node-launch-2026
 ```
 
 ---
@@ -114,8 +114,8 @@ Five ready-to-import starter workflows live in [`templates/`](templates/) — a 
 
 ## Links
 
-- Public n8n Workflow Grader: <https://nocrash.io/tools/n8n-workflow-grader>
-- Start watching your n8n: <https://nocrash.io/>
+- Public n8n Workflow Grader: <https://nocrash.io/tools/n8n-workflow-grader?utm_source=n8n-node&utm_medium=community&utm_campaign=node-launch-2026>
+- Start watching your n8n: <https://nocrash.io/?utm_source=n8n-node&utm_medium=community&utm_campaign=node-launch-2026>
 
 ---
 
