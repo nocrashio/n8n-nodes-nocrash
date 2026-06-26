@@ -3,7 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Daily n8n self-audit → Telegram\n\nEvery morning this workflow asks NoCrash to grade **every workflow in your n8n**, then sends the instance grade and at-risk count to a Telegram chat — your morning health check before the day starts.\n\n**What you need**\n- A *NoCrash — Your n8n Instance API* credential (your own n8n URL + n8n API key) on the audit step.\n- A Telegram credential on the send step, plus the chat ID to message.\n\nThe free audit grades **design only** — it never reads your executions. Credentials are stripped before anything is sent.\n\nRequires a free NoCrash account → https://nocrash.io",
+        "content": "## Daily n8n self-audit → Telegram\n\nEvery morning this workflow asks NoCrash to grade **every workflow in your n8n**, then sends the instance grade and at-risk count to a Telegram chat — your morning health check before the day starts.\n\n**What you need**\n- A *NoCrash — Your n8n Instance API* credential (your own n8n URL + n8n API key) on the audit step.\n- A Telegram credential on the send step, plus the chat ID to message.\n\nThe free audit grades **design only** — it never reads your executions. Credentials are stripped before anything is sent.\n\nRequires a free NoCrash account → https://nocrash.io/?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026",
         "height": 360,
         "width": 420,
         "color": 4

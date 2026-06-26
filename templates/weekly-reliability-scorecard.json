@@ -3,7 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Weekly reliability scorecard → Slack + email\n\nEvery Monday morning this workflow audits **every workflow in your n8n** and turns the result into a shareable scorecard: the instance grade, how many workflows are at risk, and the worst offenders. It posts the scorecard to Slack **and** emails it — perfect for a weekly team or client report.\n\n**What you need**\n- A *NoCrash — Your n8n Instance API* credential (your own n8n URL + n8n API key) on the audit step.\n- A Slack credential and an SMTP/email credential on the send steps.\n\nThe free audit grades **design only** — it never reads your executions. Credentials are stripped before anything is sent.\n\nRequires a free NoCrash account → https://nocrash.io",
+        "content": "## Weekly reliability scorecard → Slack + email\n\nEvery Monday morning this workflow audits **every workflow in your n8n** and turns the result into a shareable scorecard: the instance grade, how many workflows are at risk, and the worst offenders. It posts the scorecard to Slack **and** emails it — perfect for a weekly team or client report.\n\n**What you need**\n- A *NoCrash — Your n8n Instance API* credential (your own n8n URL + n8n API key) on the audit step.\n- A Slack credential and an SMTP/email credential on the send steps.\n\nThe free audit grades **design only** — it never reads your executions. Credentials are stripped before anything is sent.\n\nRequires a free NoCrash account → https://nocrash.io/?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026",
         "height": 380,
         "width": 440,
         "color": 4

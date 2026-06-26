@@ -5,11 +5,11 @@ Ready-to-import n8n workflow templates that showcase the NoCrash node.
 Each one is built as a **well-made** n8n workflow — descriptive step names, retries on
 every step that calls a service, an execution timeout, a set timezone, and a
 sticky note explaining the flow. Every template scores **97 / 100 ("Solid")**
-on the public [NoCrash Workflow Grader](https://nocrash.io/tools/n8n-workflow-grader)
+on the public [NoCrash Workflow Grader](https://nocrash.io/tools/n8n-workflow-grader?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026)
 (the only deduction is that the NoCrash node itself is an unverified community
 add-on — expected for a community node).
 
-> **Requires a free NoCrash account — https://nocrash.io**
+> **Requires a free NoCrash account — https://nocrash.io/?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026**
 
 ## How to import
 
@@ -79,6 +79,6 @@ report.
 
 ## Links
 
-- Public n8n Workflow Grader: <https://nocrash.io/tools/n8n-workflow-grader>
-- Start watching your n8n: <https://nocrash.io/>
-- Free NoCrash account: <https://nocrash.io>
+- Public n8n Workflow Grader: <https://nocrash.io/tools/n8n-workflow-grader?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026>
+- Start watching your n8n: <https://nocrash.io/?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026>
+- Free NoCrash account: <https://nocrash.io/?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026>
