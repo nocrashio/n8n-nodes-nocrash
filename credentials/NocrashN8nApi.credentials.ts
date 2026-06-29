@@ -17,7 +17,8 @@ import type {
 export class NocrashN8nApi implements ICredentialType {
   name = "nocrashN8nApi";
 
-  displayName = 'NoCrash - Your N8n Instance API';
+  // eslint-disable-next-line n8n-nodes-base/cred-class-field-display-name-miscased -- "n8n" is the brand's canonical lowercase spelling
+  displayName = "NoCrash - Your n8n Instance API";
 
   icon: Icon = { light: "file:icons/nocrash.svg", dark: "file:icons/nocrash.dark.svg" };
 
