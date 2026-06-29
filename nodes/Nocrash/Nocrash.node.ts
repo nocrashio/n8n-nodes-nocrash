@@ -68,7 +68,8 @@ export class Nocrash implements INodeType {
         default: "audit",
         options: [
           {
-            name: "Audit My N8n",
+            // eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased -- "n8n" is the brand's canonical lowercase spelling
+            name: "Audit My n8n",
             value: "audit",
             description:
               "Grade every workflow in your n8n and get an instance scorecard (free, static design grade)",
@@ -183,11 +184,9 @@ async function runAudit(
   try {
     grade = await gradeBatch(this, nocrashBaseUrl, strippedWorkflows);
   } catch (error) {
-    throw new NodeOperationError(
-      this.getNode(),
-      `NoCrash Grader request failed: ${(error as Error).message}`,
-      { itemIndex: 0 },
-    );
+    // Preserve the HTTP status code + response body in the n8n UI. The audit op
+    // returns early from execute() and never reaches the outer NodeApiError catch.
+    throw new NodeApiError(this.getNode(), error as JsonObject, { itemIndex: 0 });
   }
 
   const workflows = attachTeasers(grade.workflows ?? []);
