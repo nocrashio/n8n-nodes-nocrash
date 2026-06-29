@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@n8n/node-cli": "0.35.1",
-    "@types/node": "20.19.0",
+    "@types/node": "26.0.1",
     "eslint": "9.29.0",
     "eslint-plugin-n8n-nodes-base": "1.16.7",
     "typescript": "5.9.2",
