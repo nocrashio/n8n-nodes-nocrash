@@ -15,6 +15,8 @@ add-on — expected for a community node).
 
 > **The five node templates require a free NoCrash account — https://nocrash.io/?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026 .** The standalone `catch-silent-n8n-failures` watchdog does not — it runs on your own n8n API credential.
 
+> **Publishing to the n8n Creator Portal?** The reviewed, portal-structured submission copy for all six templates (Title / Quick overview / How it works / Setup / Requirements / Customization) lives in [`SUBMISSIONS.md`](./SUBMISSIONS.md). Paste that copy into the portal fields — do **not** use the portal's AI auto-fill.
+
 ## How to import
 
 In n8n: **Workflows → Import from File**, then select the JSON. After importing,
