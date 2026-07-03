@@ -1,6 +1,10 @@
 # Templates
 
-Ready-to-import n8n workflow templates that showcase the NoCrash node.
+Ready-to-import n8n workflow templates. Five showcase the **NoCrash node**; one
+(`catch-silent-n8n-failures`) is a **standalone watchdog** that needs no NoCrash
+account or community node — it reads your own n8n executions and flags the two
+failures a green run hides (a missed run, and a run that finished green but did
+nothing).
 
 Each one is built as a **well-made** n8n workflow — descriptive step names, retries on
 every step that calls a service, an execution timeout, a set timezone, and a
@@ -9,7 +13,7 @@ on the public [NoCrash Workflow Grader](https://nocrash.io/tools/n8n-workflow-gr
 (the only deduction is that the NoCrash node itself is an unverified community
 add-on — expected for a community node).
 
-> **Requires a free NoCrash account — https://nocrash.io/?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026**
+> **The five node templates require a free NoCrash account — https://nocrash.io/?utm_source=n8n-template&utm_medium=community&utm_campaign=node-launch-2026 .** The standalone `catch-silent-n8n-failures` watchdog does not — it runs on your own n8n API credential.
 
 ## How to import
 
@@ -23,10 +27,11 @@ and replace the `REPLACE_WITH_...` placeholders (Monitor ID, chat ID, etc.).
 |---|---|---|
 | **NoCrash — Your n8n Instance API** (`nocrashN8nApi`) | the **Audit my n8n** op | your own n8n instance URL + an n8n API key. NoCrash reads workflow **design only**; credentials are stripped locally before anything is sent. |
 | **NoCrash API** (`nocrashApi`) | the **Heartbeat** and **Report Failure** ops | your NoCrash key (starts with `nc_`), created in the NoCrash dashboard under *Settings → API keys*. |
+| **n8n API** (`n8nApi`, built-in) | the standalone **`catch-silent-n8n-failures`** watchdog | your own n8n base URL + an n8n API key. The watchdog reads your recent executions to flag missed and green-but-empty runs. No NoCrash account or community node needed. |
 
 ---
 
-## The 5 templates
+## The templates (5 node templates + 1 standalone watchdog)
 
 ### 1. `daily-n8n-self-audit-to-slack.json` — Grader: 97/100 (Solid)
 
@@ -74,6 +79,20 @@ report.
 
 - **NoCrash op:** Audit my n8n · **Credential:** NoCrash — Your n8n Instance API
 - **Also needs:** a Slack credential and an SMTP/email credential.
+
+### 6. `catch-silent-n8n-failures.json` — standalone watchdog (no NoCrash node)
+
+A **node-free** watchdog you import and point at your own instance. A Schedule
+Trigger runs hourly; the built-in **n8n** node reads your workflows and recent
+executions; a **Code** node flags the two failures a green checkmark hides — a
+scheduled run that **never fired**, and a run that finished green while moving
+**zero items**. If anything is flagged, it alerts you in Slack. It needs **no
+NoCrash account and no community node**, so it imports and runs on n8n Cloud and
+self-hosted alike.
+
+- **NoCrash op:** none (standalone) · **Credential:** n8n API (your own instance URL + API key)
+- **Also needs:** a Slack credential (swap for Telegram or email if you prefer).
+- **Verified:** e2e-tested in a real n8n instance — catches a planted missed run and a planted green-but-empty run.
 
 ---
 

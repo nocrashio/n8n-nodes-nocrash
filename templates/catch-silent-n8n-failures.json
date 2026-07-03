@@ -1,0 +1,302 @@
+{
+  "name": "Catch Silent n8n Failures with NoCrash: Missed Runs and Green-but-Empty Alerts",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "b201cd86-6246-4262-bd95-372a7dfdc834",
+      "name": "Every hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -160,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "watchlist",
+              "name": "watchlist",
+              "type": "array",
+              "value": "={{ [ { \"name\": \"Daily client report\", \"expectedEveryMinutes\": 1440, \"minItems\": 1 }, { \"name\": \"Lead sync\", \"expectedEveryMinutes\": 15, \"minItems\": 1 } ] }}"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "e5090d87-fa28-4ccb-8d59-26918f82fed2",
+      "name": "Which workflows to watch",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        60,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "workflow",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "activeWorkflows": false
+        }
+      },
+      "id": "412ad519-a334-44de-bbde-c92922019199",
+      "name": "List your workflows",
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        280,
+        0
+      ],
+      "executeOnce": true,
+      "credentials": {
+        "n8nApi": {
+          "id": "REPLACE_WITH_YOUR_N8N_API_CREDENTIAL_ID",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "execution",
+        "operation": "getAll",
+        "returnAll": false,
+        "limit": 250,
+        "filters": {},
+        "options": {
+          "activeWorkflows": true
+        }
+      },
+      "id": "0b32ec42-ff08-45dd-b788-4b2001bae0bf",
+      "name": "Recent runs",
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        500,
+        0
+      ],
+      "executeOnce": true,
+      "credentials": {
+        "n8nApi": {
+          "id": "REPLACE_WITH_YOUR_N8N_API_CREDENTIAL_ID",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// NoCrash silent-failure watchdog.\n// Flags two things a green checkmark hides:\n//   1. a run that never fired (missed run)\n//   2. a run that finished green but moved nothing (ran but did nothing)\n\nconst GRACE = 1.2; // flag a missed run once it is 20% past its expected interval\nconst now = Date.now();\nconst norm = (s) => String(s || '').trim().toLowerCase();\n\nconst watchlist = ($('Which workflows to watch').first().json.watchlist) || [];\nconst workflows = $('List your workflows').all().map((i) => i.json);\nconst runs = $('Recent runs').all().map((i) => i.json);\n\n// How many items did the final node of this execution actually emit?\nfunction itemsProduced(run) {\n  const rd = run && run.data && run.data.resultData;\n  if (!rd || !rd.runData) return null; // detail not included -> unknown, do not guess\n  const lastName = rd.lastNodeExecuted;\n  const last = lastName && rd.runData[lastName] && rd.runData[lastName][0];\n  const main = last && last.data && last.data.main;\n  if (!Array.isArray(main)) return null;\n  return main.reduce((sum, out) => sum + (Array.isArray(out) ? out.length : 0), 0);\n}\n\nconst flags = [];\n\nfor (const watch of watchlist) {\n  const name = watch.name;\n  const everyMin = Number(watch.expectedEveryMinutes) || 0;\n  const minItems = watch.minItems == null ? 1 : Number(watch.minItems);\n\n  const wf = workflows.find((w) => norm(w.name) === norm(name));\n  if (!wf) {\n    flags.push({ workflow: name, check: 'not found', detail: 'No workflow named \"' + name + '\" in your n8n. Check the spelling in the step above.' });\n    continue;\n  }\n\n  const wfRuns = runs\n    .filter((r) => String(r.workflowId) === String(wf.id))\n    .sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt));\n  const successes = wfRuns.filter((r) => r.status === 'success');\n  const lastSuccess = successes[0];\n\n  // Check 1: the run that never fired.\n  if (everyMin > 0) {\n    if (!lastSuccess) {\n      flags.push({ workflow: name, check: 'missed run', detail: 'No good run on record yet. You expect one about every ' + everyMin + ' min.' });\n    } else {\n      const lastMs = new Date(lastSuccess.stoppedAt || lastSuccess.startedAt).getTime();\n      const overdueMin = Math.round((now - lastMs) / 60000);\n      if (now - lastMs > everyMin * 60000 * GRACE) {\n        flags.push({ workflow: name, check: 'missed run', detail: 'Last good run was ' + overdueMin + ' min ago; you expect one about every ' + everyMin + ' min.', lastSuccessAt: new Date(lastMs).toISOString(), overdueMinutes: overdueMin });\n      }\n    }\n  }\n\n  // Check 2: green but empty.\n  for (const r of successes.slice(0, 20)) {\n    const produced = itemsProduced(r);\n    if (produced !== null && produced < minItems) {\n      flags.push({ workflow: name, check: 'ran but did nothing', detail: 'A run finished green but moved ' + produced + ' item(s); you expect at least ' + minItems + '.', when: r.stoppedAt || r.startedAt, itemsProduced: produced });\n      break; // one example per workflow is plenty\n    }\n  }\n}\n\nconst lines = flags.map((f) => '- *' + f.workflow + '* - ' + f.check + ': ' + f.detail);\nconst message = flags.length\n  ? ':rotating_light: NoCrash caught ' + flags.length + ' thing(s) worth a look:\\n' + lines.join('\\n') + \"\\n\\nThis is a check you run yourself. NoCrash watches from outside your instance, learns each workflow's normal cadence, and keeps watching even when your instance is down. Score a workflow free, no signup: https://nocrash.io/tools/n8n-workflow-grader?utm_source=n8n-templates&utm_medium=community&utm_campaign=node-launch-2026\"\n  : '';\n\nreturn [{ json: { flaggedCount: flags.length, flags, message } }];\n"
+      },
+      "id": "b958b3d3-d85c-435f-a908-749ccad4f918",
+      "name": "Find silent failures",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "has-flags",
+              "leftValue": "={{ $json.flaggedCount }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ]
+        }
+      },
+      "id": "9f28ab87-2180-4d37-b9e2-c4aea61c7a9d",
+      "name": "Anything flagged?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        940,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "message",
+        "operation": "post",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "automation-alerts"
+        },
+        "messageType": "text",
+        "text": "={{ $json.message }}",
+        "otherOptions": {}
+      },
+      "id": "7feee68f-8843-42fe-8123-6b3f4fdcbc60",
+      "name": "Send the alert (Slack)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        1180,
+        -80
+      ],
+      "credentials": {
+        "slackApi": {
+          "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "This is a basic reliability check you maintain yourself: one config list, one fixed grace window, and a check that only runs when this workflow runs. It catches the two most common silent failures (the run that never fired and the green run that did nothing) for the workflows you remember to list.\n\nNoCrash does this from outside your instance with no build: it learns each workflow’s normal cadence instead of a fixed window, survives your instance going down, and watches n8n alongside your vibecoded apps, URLs, and Stripe. Score a workflow free, no signup: the NoCrash Workflow Grader.\n\nhttps://nocrash.io/tools/n8n-workflow-grader?utm_source=n8n-templates&utm_medium=community&utm_campaign=node-launch-2026",
+        "color": 4,
+        "width": 460,
+        "height": 320
+      },
+      "id": "85dbdbd6-ecc8-48f9-9109-3ebb6d960bfb",
+      "name": "Read me first",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -380
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Edit the list in \"Which workflows to watch\" to match your own n8n. Each row has three parts:\n- name: the exact workflow name as it appears in n8n\n- expectedEveryMinutes: how often it should run (1440 = daily, 60 = hourly, 15 = every 15 min)\n- minItems: the smallest number of items a real run should move (leave at 1)",
+        "color": 7,
+        "width": 380,
+        "height": 220
+      },
+      "id": "1aa0dcec-256e-4130-9abd-454becf77c9d",
+      "name": "How to edit the list",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Prefer Telegram or email? Delete the Slack node and drop a Telegram or Send Email node in its place, then wire it to the \"true\" branch. The same message text ({{ $json.message }}) works in any of them.",
+        "color": 5,
+        "width": 320,
+        "height": 200
+      },
+      "id": "626bfbe4-5070-476e-9b67-6a3142b7463f",
+      "name": "Swap the alert channel",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        140
+      ]
+    }
+  ],
+  "connections": {
+    "Every hour": {
+      "main": [
+        [
+          {
+            "node": "Which workflows to watch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Which workflows to watch": {
+      "main": [
+        [
+          {
+            "node": "List your workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List your workflows": {
+      "main": [
+        [
+          {
+            "node": "Recent runs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recent runs": {
+      "main": [
+        [
+          {
+            "node": "Find silent failures",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find silent failures": {
+      "main": [
+        [
+          {
+            "node": "Anything flagged?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anything flagged?": {
+      "main": [
+        [
+          {
+            "node": "Send the alert (Slack)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
