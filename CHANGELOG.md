@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-07-19
+
+### Changed
+
+- Heartbeat and Report Failure operations: sharpened the **Monitor ID** field so a new user knows exactly what to enter. The field now shows a `mon_1a2b3c4d5e6f` placeholder and its hint names the exact source ("starts with mon_ and is shown on the watch's page in your NoCrash account") plus a note that Audit does not need it. Prompted by a real user hitting the generic "Parameter Monitor ID is required" error with no idea where the value comes from.
+
 ## [0.1.2] - 2026-06-24
 
 ### Changed

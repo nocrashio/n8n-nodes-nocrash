@@ -13,7 +13,9 @@ export const reportFailureFields: INodeProperties[] = [
     type: "string",
     default: "",
     required: true,
-    description: "Which NoCrash watch this failure is for (its Monitor ID, from your NoCrash dashboard)",
+    placeholder: "mon_1a2b3c4d5e6f",
+    description:
+      "The Monitor ID of the NoCrash watch this failure is for. It starts with mon_ and is shown on the watch's page in your NoCrash account. Not needed for the Audit operation.",
     displayOptions: {
       show: { operation: ["reportFailure"] },
     },
